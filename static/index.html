@@ -62,7 +62,7 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
 world = {};
 
 //XXX: TODO Make this prettier!
-function drawCircle(context,entity) {
+async function drawCircle(context,entity) {
     with(context) {
         beginPath();              
         lineWidth = 3;
@@ -72,7 +72,7 @@ function drawCircle(context,entity) {
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
         arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
-        stroke();                                
+        stroke();                         
     }
 }
 
@@ -256,17 +256,29 @@ mouse = (function() {
 // Add the application specific mouse listeners!
 //XXX: TODO Make these prettier!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'blue'});
+    color = getRandomColor();
+    addEntityWithoutName({'x':x,'y':y,'colour':color});
 });
 
 mouse.mouseuppers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'red'});
+    color = getRandomColor();
+    addEntityWithoutName({'x':x,'y':y,'colour':color});
 });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'green',
+    color = getRandomColor();
+    addEntityWithoutName({'x':x,'y':y,'colour':color,
                           'radius':10});
 });
+
+function getRandomColor(){
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
 
 function update() {
@@ -274,7 +286,7 @@ function update() {
     fetch("http://"+host+"/world")  // from fetch() page on mozilla
         .then((response) => response.json())
         .then((data) => world = data);
-    drawFrame();
+    renderFrame();
 }
 
 // 30 frames per second
