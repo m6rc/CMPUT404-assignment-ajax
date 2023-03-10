@@ -74,7 +74,7 @@ def flask_post_json():
 @app.route("/")
 def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
-    return redirect("/static/index.html"), 200
+    return redirect("/static/index.html"), 301
 
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
@@ -100,7 +100,7 @@ def get_entity(entity):
 def clear():
     '''Clear the world out!'''
     myWorld.clear()
-    return '', 200
+    return {}, 200
 
 if __name__ == "__main__":
     app.run()
